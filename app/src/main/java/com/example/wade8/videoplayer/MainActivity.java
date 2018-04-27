@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     private RelativeLayout mInnerRelativeLayout;
     private RelativeLayout mRelativeLayout;
     private FrameLayout mOuterFramLayout;
-    private String mVideoUrl = "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4";
+    private String mVideoUrl = "https://drive.google.com/uc?export=download&id=1TDZMHKTEqCsYyEvMAfdNtZHJD2sLMZ6h";
     //https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/protraitVideo.mp4
     //https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4
     private MediaController mediaController;
