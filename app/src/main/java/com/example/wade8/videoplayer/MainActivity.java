@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
 
 
+
         try{
             mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MOVIE).build());
             mMediaPlayer.setDataSource(mVideoUrl);
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public int getDuration() {
-        return 0;
+        return mMediaPlayer.getDuration();
     }
 
     @Override
