@@ -228,6 +228,7 @@ public class VideoControllerView extends FrameLayout {
      */
     public void show() {
         show(sDefaultTimeout);
+        Log.e("show","executed");
     }
 
     /**
@@ -439,9 +440,9 @@ public class VideoControllerView extends FrameLayout {
         }
 
         if (mPlayer.isPlaying()) {
-            mPauseButton.setImageResource(R.drawable.ic_media_pause);
+            mPauseButton.setImageResource(R.drawable.ic_pause_black_24dp);
         } else {
-            mPauseButton.setImageResource(R.drawable.ic_media_play);
+            mPauseButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
         }
     }
 
@@ -451,10 +452,10 @@ public class VideoControllerView extends FrameLayout {
         }
         
         if (mPlayer.isFullScreen()) {
-            mFullscreenButton.setImageResource(R.drawable.ic_media_fullscreen_shrink);
+            mFullscreenButton.setImageResource(R.drawable.ic_fullscreen_exit_black_24dp);
         }
         else {
-            mFullscreenButton.setImageResource(R.drawable.ic_media_fullscreen_stretch);
+            mFullscreenButton.setImageResource(R.drawable.ic_fullscreen_black_24dp);
         }
     }
 
