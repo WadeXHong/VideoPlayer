@@ -17,7 +17,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#CC000000"
+    android:background="@android:color/white"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,17 +51,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="4dip" />
 
-        <ImageButton android:id="@+id/fullscreen"
-            android:layout_marginTop="-7dp"
-            android:paddingTop="4dip"
-            android:paddingBottom="4dip"
-            android:paddingLeft="10dip"
-            android:paddingRight="4dip"
-            android:layout_gravity="top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/description" />
+
 
     </LinearLayout>
 
@@ -85,22 +75,31 @@
             android:contentDescription="@string/description" />
 
         <ImageButton android:id="@+id/rew"
-            style="@android:style/MediaButton.Rew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_fast_rewind_black_24dp"
             android:contentDescription="@string/description" />
 
         <ImageButton android:id="@+id/pause"
-            style="@android:style/MediaButton.Play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_pause_black_24dp"
             android:contentDescription="@string/description" />
 
         <ImageButton android:id="@+id/ffwd"
-            style="@android:style/MediaButton.Ffwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_fast_forward_black_24dp"
             android:contentDescription="@string/description" />
 
         <ImageButton android:id="@+id/next"
             style="@android:style/MediaButton.Next"
             android:contentDescription="@string/description" />
 
-        <ImageButton android:id="@+id/fullscreen2"
+        <ImageButton android:id="@+id/fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"

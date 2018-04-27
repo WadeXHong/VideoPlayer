@@ -1,5 +1,6 @@
 package com.example.wade8.videoplayer;
 
+import android.content.res.Configuration;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -69,8 +70,12 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mController.show();
-        Log.e("onTouchEvent","executed");
+        if (getResources().getConfiguration().orientation == 1) {
+            mController.showPermanent();
+            Log.e("onTouchEvent", "executed");
+        }else {
+            mController.show();
+        }
         return false;
     }
 
@@ -138,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     public void onPrepared(MediaPlayer mp) {
         mController.setMediaPlayer(this);
         mController.setAnchorView(mFrameLayout);
+        if (getResources().getConfiguration().orientation == 1) {
+            mController.showPermanent();
+        }else {
+            mController.show();
+        }
         mMediaPlayer.start();
     }
 

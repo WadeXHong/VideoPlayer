@@ -231,6 +231,11 @@ public class VideoControllerView extends FrameLayout {
         Log.e("show","executed");
     }
 
+    public void showPermanent() {
+        show(Integer.MAX_VALUE);
+        Log.e("show","executed");
+    }
+
     /**
      * Disable pause or seek buttons if the stream cannot be paused or seeked.
      * This requires the control interface to be a MediaPlayerControlExt
