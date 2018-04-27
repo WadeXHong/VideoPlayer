@@ -95,6 +95,7 @@ public class VideoControllerView extends FrameLayout {
     private ImageButton         mNextButton;
     private ImageButton         mPrevButton;
     private ImageButton         mFullscreenButton;
+    private ImageButton         mMuteButton;
     private Handler             mHandler = new MessageHandler(this);
 
     public VideoControllerView(Context context, AttributeSet attrs) {
@@ -219,6 +220,11 @@ public class VideoControllerView extends FrameLayout {
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
 
+        mMuteButton = (ImageButton) v.findViewById(R.id.mute);
+        if(mMuteButton !=null ){
+            mMuteButton.setOnClickListener(mMuteListener);
+        }
+
         installPrevNextListeners();
     }
 
@@ -300,6 +306,7 @@ public class VideoControllerView extends FrameLayout {
             mHandler.sendMessageDelayed(msg, timeout);
         }
     }
+
     
     public boolean isShowing() {
         return mShowing;
@@ -436,6 +443,26 @@ public class VideoControllerView extends FrameLayout {
         public void onClick(View v) {
             doToggleFullscreen();
             show(sDefaultTimeout);
+        }
+    };
+
+    private View.OnClickListener mMuteListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+
+            if (mPlayer != null){
+                if (mPlayer.isMute()){
+                    mPlayer.cancalMute();
+                    mMuteButton.setImageResource(R.drawable.ic_volume_mute_black_24dp);
+                    show(sDefaultTimeout);
+                }else{
+                    mPlayer.mute();
+                    mMuteButton.setImageResource(R.drawable.ic_volume_off_black_24dp);
+                    show(sDefaultTimeout);
+                }
+            }
+
         }
     };
 
@@ -584,7 +611,7 @@ public class VideoControllerView extends FrameLayout {
             }
             
             int pos = mPlayer.getCurrentPosition();
-            pos -= 5000; // milliseconds
+            pos -= 15000; // milliseconds
             mPlayer.seekTo(pos);
             setProgress();
 
@@ -649,6 +676,9 @@ public class VideoControllerView extends FrameLayout {
         boolean canSeekForward();
         boolean isFullScreen();
         void    toggleFullScreen();
+        boolean isMute();
+        void    mute();
+        void    cancalMute();
     }
     
     private static class MessageHandler extends Handler {

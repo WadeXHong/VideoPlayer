@@ -1,5 +1,6 @@
 package com.example.wade8.videoplayer;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -12,6 +13,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     private MediaController mediaController;
     private VideoControllerView mController;
     private MediaPlayer mMediaPlayer;
+    private boolean mIsFullScreen = false;
+    private boolean mIsMute = false;
     private int mVideoHeight, mVideoWidth, mScreenHeight, mScreenWidth;
 
 
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         setContentView(R.layout.activity_main);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        setStatusBarColor(this);
         mScreenHeight = metrics.heightPixels;
         mScreenWidth = metrics.widthPixels;
 
@@ -60,6 +67,20 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void setStatusBarColor(Activity activity){
+        Window window = activity.getWindow();
+
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(activity.getResources().getColor(android.R.color.transparent));
+
+        window.getDecorView().setSystemUiVisibility(
+                  View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+
+
     }
 
 
@@ -126,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public boolean isFullScreen() {
-        return false;
+        return mIsFullScreen;
     }
 
     @Override
@@ -142,6 +163,23 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     }
 
     @Override
+    public boolean isMute() {
+        return mIsMute;
+    }
+
+    @Override
+    public void mute() {
+        mMediaPlayer.setVolume(0,0);
+        mIsMute = true;
+    }
+
+    @Override
+    public void cancalMute() {
+        mMediaPlayer.setVolume(1,1);
+        mIsMute = false;
+    }
+
+    @Override
     public void onPrepared(MediaPlayer mp) {
         mController.setMediaPlayer(this);
         mController.setAnchorView(mOuterFramLayout);
@@ -149,13 +187,14 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         mVideoWidth = mMediaPlayer.getVideoWidth();
         Log.e("Height", mVideoHeight +"");
         Log.e("Width", mVideoWidth +"");
+
+        mMediaPlayer.start();
         if (getResources().getConfiguration().orientation == 1) {
             portraitLayoutSet();
             mController.showPermanent();
         }else {
             mController.show();
         }
-        mMediaPlayer.start();
     }
 
     private void portraitLayoutSet() {
@@ -205,8 +244,12 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             portraitLayoutSet();
+            mIsFullScreen = false;
+            mController.showPermanent();
         }else if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
             landscapeLayoutSet();
+            mIsFullScreen = true;
+            mController.show();
         }
     }
 }
