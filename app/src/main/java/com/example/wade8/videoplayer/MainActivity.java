@@ -1,38 +1,48 @@
 package com.example.wade8.videoplayer;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity implements VideoControllerView.MediaPlayerControl, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener{
 
     private SurfaceView mSurfaceView;
-    private FrameLayout mFrameLayout;
-    private ConstraintLayout mConstraintLayout;
+    private RelativeLayout mInnerRelativeLayout;
+    private RelativeLayout mRelativeLayout;
     private FrameLayout mOuterFramLayout;
-    private String mVideoUrl = "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4";
+    private String mVideoUrl = "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/protraitVideo.mp4";
+    //https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/protraitVideo.mp4
+    //https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4
     private MediaController mediaController;
     private VideoControllerView mController;
     private MediaPlayer mMediaPlayer;
-    private int mHeight, mWidth;
+    private int mVideoHeight, mVideoWidth, mScreenHeight, mScreenWidth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        mScreenHeight = metrics.heightPixels;
+        mScreenWidth = metrics.widthPixels;
 
-        mFrameLayout = findViewById(R.id.framelayout);
-        mConstraintLayout = findViewById(R.id.constraintlayout);
+        mInnerRelativeLayout = findViewById(R.id.innerrelativelayout);
+        mInnerRelativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, mScreenWidth));
+        mRelativeLayout = findViewById(R.id.relativelayout);
         mSurfaceView = findViewById(R.id.surfaceview);
         mOuterFramLayout = findViewById(R.id.outerframlayout);
         SurfaceHolder videoHolder = mSurfaceView.getHolder();
@@ -45,25 +55,8 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         try{
             mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MOVIE).build());
             mMediaPlayer.setDataSource(mVideoUrl);
-            //Sets the audio stream type for this MediaPlayer，设置流的类型，此为音乐流
-//            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setOnPreparedListener(this);
 
-            //Sets the SurfaceHolder to use for displaying the video portion of the media，设置播放的容器
-//            mMediaPlayer.setDisplay(mSurfaceView.getHolder());
-//            mMediaPlayer.prepare();
-            //Interface definition for a callback to be invoked when the media source is ready for playback
-
-
-
-//            mController = new VideoControllerView(this);
-//            mController.setAnchorView(mFrameLayout);
-//            mController.setMediaPlayer(this);
-//            mSurfaceView.setMediaController(mController);
-////            Uri link = Uri.parse(mVideoUrl.replace(" ","%20"));
-//            mSurfaceView.setVideoURI(Uri.parse(mVideoUrl));
-//            mSurfaceView.requestFocus();
-//            mSurfaceView.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,16 +145,41 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     public void onPrepared(MediaPlayer mp) {
         mController.setMediaPlayer(this);
         mController.setAnchorView(mOuterFramLayout);
-        mHeight = mMediaPlayer.getVideoHeight();
-        mWidth = mMediaPlayer.getVideoWidth();
-        Log.e("Height",mHeight+"");
-        Log.e("Width",mWidth+"");
+        mVideoHeight = mMediaPlayer.getVideoHeight();
+        mVideoWidth = mMediaPlayer.getVideoWidth();
+        Log.e("Height", mVideoHeight +"");
+        Log.e("Width", mVideoWidth +"");
         if (getResources().getConfiguration().orientation == 1) {
+            portraitLayoutSet();
             mController.showPermanent();
         }else {
             mController.show();
         }
         mMediaPlayer.start();
+    }
+
+    private void portraitLayoutSet() {
+        if (mVideoHeight>mVideoWidth){
+            mInnerRelativeLayout.setBackgroundColor(Color.BLACK);
+
+            mSurfaceView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth *mVideoWidth/mVideoHeight, mScreenWidth));
+
+        }else {
+            mInnerRelativeLayout.setBackgroundColor(Color.TRANSPARENT);
+            mSurfaceView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth, mScreenWidth*mVideoHeight/mVideoWidth));
+        }
+    }
+
+    private void landscapeLayoutSet() {
+        if (mVideoHeight>mVideoWidth){
+            mInnerRelativeLayout.setBackgroundColor(Color.BLACK);
+
+            mSurfaceView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenWidth*mVideoWidth/mVideoHeight, mScreenWidth));
+
+        }else {
+            mInnerRelativeLayout.setBackgroundColor(Color.TRANSPARENT);
+            mSurfaceView.setLayoutParams(new RelativeLayout.LayoutParams(mScreenHeight, mScreenHeight*mVideoHeight/mVideoWidth));
+        }
     }
 
     @Override
@@ -175,8 +193,20 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     }
 
+
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            portraitLayoutSet();
+        }else if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            landscapeLayoutSet();
+        }
     }
 }

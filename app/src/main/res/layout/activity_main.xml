@@ -6,28 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.wade8.videoplayer.MainActivity">
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintlayout"
+    <RelativeLayout
+        android:id="@+id/relativelayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <FrameLayout
-            android:id="@+id/framelayout"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:id="@+id/innerrelativelayout"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:gravity="center">
 
             <SurfaceView
                 android:id="@+id/surfaceview"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
-        </FrameLayout>
+        </RelativeLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 
 
 
