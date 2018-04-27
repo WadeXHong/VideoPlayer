@@ -1,5 +1,6 @@
 package com.example.wade8.videoplayer;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public void pause() {
-
+        mMediaPlayer.pause();
     }
 
     @Override
@@ -96,17 +97,17 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public int getCurrentPosition() {
-        return 0;
+        return mMediaPlayer.getCurrentPosition();
     }
 
     @Override
     public void seekTo(int pos) {
-
+        mMediaPlayer.seekTo(pos);
     }
 
     @Override
     public boolean isPlaying() {
-        return false;
+        return mMediaPlayer.isPlaying();
     }
 
     @Override
@@ -116,17 +117,17 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public boolean canPause() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekBackward() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekForward() {
-        return false;
+        return true;
     }
 
     @Override
@@ -136,7 +137,14 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public void toggleFullScreen() {
-
+        //變成全螢幕
+        if (getResources().getConfiguration().orientation == 1){
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
     }
 
     @Override
