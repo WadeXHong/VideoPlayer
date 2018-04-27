@@ -371,13 +371,21 @@ public class VideoControllerView extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        show(sDefaultTimeout);
+        if (!mPlayer.isPortrait()) {
+            show(sDefaultTimeout);
+        }else {
+            showPermanent();
+        }
         return true;
     }
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
-        show(sDefaultTimeout);
+        if (!mPlayer.isPortrait()) {
+            show(sDefaultTimeout);
+        }else {
+            showPermanent();
+        }
         return false;
     }
 
@@ -395,7 +403,11 @@ public class VideoControllerView extends FrameLayout {
                 || keyCode == KeyEvent.KEYCODE_SPACE) {
             if (uniqueDown) {
                 doPauseResume();
-                show(sDefaultTimeout);
+                if (!mPlayer.isPortrait()) {
+                    show(sDefaultTimeout);
+                }else {
+                    showPermanent();
+                }
                 if (mPauseButton != null) {
                     mPauseButton.requestFocus();
                 }
@@ -405,7 +417,11 @@ public class VideoControllerView extends FrameLayout {
             if (uniqueDown && !mPlayer.isPlaying()) {
                 mPlayer.start();
                 updatePausePlay();
-                show(sDefaultTimeout);
+                if (!mPlayer.isPortrait()) {
+                    show(sDefaultTimeout);
+                }else {
+                    showPermanent();
+                }
             }
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP
@@ -413,7 +429,11 @@ public class VideoControllerView extends FrameLayout {
             if (uniqueDown && mPlayer.isPlaying()) {
                 mPlayer.pause();
                 updatePausePlay();
-                show(sDefaultTimeout);
+                if (!mPlayer.isPortrait()) {
+                    show(sDefaultTimeout);
+                }else {
+                    showPermanent();
+                }
             }
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
@@ -428,21 +448,33 @@ public class VideoControllerView extends FrameLayout {
             return true;
         }
 
-        show(sDefaultTimeout);
+        if (!mPlayer.isPortrait()) {
+            show(sDefaultTimeout);
+        }else {
+            showPermanent();
+        }
         return super.dispatchKeyEvent(event);
     }
 
     private View.OnClickListener mPauseListener = new View.OnClickListener() {
         public void onClick(View v) {
             doPauseResume();
-            show(sDefaultTimeout);
+            if (!mPlayer.isPortrait()) {
+                show(sDefaultTimeout);
+            }else {
+                showPermanent();
+            };
         }
     };
 
     private View.OnClickListener mFullscreenListener = new View.OnClickListener() {
         public void onClick(View v) {
             doToggleFullscreen();
-            show(sDefaultTimeout);
+            if (!mPlayer.isPortrait()) {
+                show(sDefaultTimeout);
+            }else {
+                showPermanent();
+            }
         }
     };
 
@@ -455,11 +487,19 @@ public class VideoControllerView extends FrameLayout {
                 if (mPlayer.isMute()){
                     mPlayer.cancalMute();
                     mMuteButton.setImageResource(R.drawable.ic_volume_mute_black_24dp);
-                    show(sDefaultTimeout);
+                    if (!mPlayer.isPortrait()) {
+                        show(sDefaultTimeout);
+                    }else {
+                        showPermanent();
+                    }
                 }else{
                     mPlayer.mute();
                     mMuteButton.setImageResource(R.drawable.ic_volume_off_black_24dp);
-                    show(sDefaultTimeout);
+                    if (!mPlayer.isPortrait()) {
+                        show(sDefaultTimeout);
+                    }else {
+                        showPermanent();
+                    }
                 }
             }
 
@@ -559,7 +599,11 @@ public class VideoControllerView extends FrameLayout {
             mDragging = false;
             setProgress();
             updatePausePlay();
-            show(sDefaultTimeout);
+            if (!mPlayer.isPortrait()) {
+                show(sDefaultTimeout);
+            }else {
+                showPermanent();
+            }
 
             // Ensure that progress is properly updated in the future,
             // the call to show() does not guarantee this because it is a
@@ -615,7 +659,11 @@ public class VideoControllerView extends FrameLayout {
             mPlayer.seekTo(pos);
             setProgress();
 
-            show(sDefaultTimeout);
+            if (!mPlayer.isPortrait()) {
+                show(sDefaultTimeout);
+            }else {
+                showPermanent();
+            }
         }
     };
 
@@ -630,7 +678,11 @@ public class VideoControllerView extends FrameLayout {
             mPlayer.seekTo(pos);
             setProgress();
 
-            show(sDefaultTimeout);
+            if (!mPlayer.isPortrait()) {
+                show(sDefaultTimeout);
+            }else {
+                showPermanent();
+            }
         }
     };
 
@@ -678,6 +730,7 @@ public class VideoControllerView extends FrameLayout {
         void    toggleFullScreen();
         boolean isMute();
         void    mute();
+        boolean isPortrait();
         void    cancalMute();
     }
     

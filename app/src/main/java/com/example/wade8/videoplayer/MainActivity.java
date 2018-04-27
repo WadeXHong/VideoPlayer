@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     private RelativeLayout mInnerRelativeLayout;
     private RelativeLayout mRelativeLayout;
     private FrameLayout mOuterFramLayout;
-    private String mVideoUrl = "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/protraitVideo.mp4";
+    private String mVideoUrl = "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4";
     //https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/protraitVideo.mp4
     //https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4
     private MediaController mediaController;
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     private boolean mIsMute = false;
     private int mVideoHeight, mVideoWidth, mScreenHeight, mScreenWidth;
     private int mBufferPercentage;
+    private boolean mIsPortrait = true;
 
 
     @Override
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         }
     }
 
-    public static void setStatusBarColor(Activity activity){
+    public void setStatusBarColor(Activity activity){
         Window window = activity.getWindow();
 
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -79,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         window.setStatusBarColor(activity.getResources().getColor(android.R.color.transparent));
 
         window.getDecorView().setSystemUiVisibility(
-                  View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                  View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
 
 
 
@@ -176,6 +178,11 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     }
 
     @Override
+    public boolean isPortrait() {
+        return mIsPortrait;
+    }
+
+    @Override
     public void cancalMute() {
         mMediaPlayer.setVolume(1,1);
         mIsMute = false;
@@ -252,10 +259,12 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             portraitLayoutSet();
+            mIsPortrait = true;
             mIsFullScreen = false;
             mController.showPermanent();
         }else if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
             landscapeLayoutSet();
+            mIsPortrait = false;
             mIsFullScreen = true;
             mController.show();
         }
