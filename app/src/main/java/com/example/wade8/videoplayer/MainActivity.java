@@ -1,12 +1,9 @@
 package com.example.wade8.videoplayer;
 
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,16 +13,17 @@ import android.view.SurfaceView;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 
-import java.util.jar.Attributes;
-
 public class MainActivity extends AppCompatActivity implements VideoControllerView.MediaPlayerControl, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener{
 
     private SurfaceView mSurfaceView;
     private FrameLayout mFrameLayout;
+    private ConstraintLayout mConstraintLayout;
+    private FrameLayout mOuterFramLayout;
     private String mVideoUrl = "https://s3-ap-northeast-1.amazonaws.com/mid-exam/Video/taeyeon.mp4";
     private MediaController mediaController;
     private VideoControllerView mController;
     private MediaPlayer mMediaPlayer;
+    private int mHeight, mWidth;
 
 
     @Override
@@ -34,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
         setContentView(R.layout.activity_main);
 
         mFrameLayout = findViewById(R.id.framelayout);
+        mConstraintLayout = findViewById(R.id.constraintlayout);
         mSurfaceView = findViewById(R.id.surfaceview);
+        mOuterFramLayout = findViewById(R.id.outerframlayout);
         SurfaceHolder videoHolder = mSurfaceView.getHolder();
         videoHolder.addCallback(this);
         mController = new VideoControllerView(this);
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
             //Sets the audio stream type for this MediaPlayer，设置流的类型，此为音乐流
 //            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setOnPreparedListener(this);
+
             //Sets the SurfaceHolder to use for displaying the video portion of the media，设置播放的容器
 //            mMediaPlayer.setDisplay(mSurfaceView.getHolder());
 //            mMediaPlayer.prepare();
@@ -150,7 +151,11 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     @Override
     public void onPrepared(MediaPlayer mp) {
         mController.setMediaPlayer(this);
-        mController.setAnchorView(mFrameLayout);
+        mController.setAnchorView(mOuterFramLayout);
+        mHeight = mMediaPlayer.getVideoHeight();
+        mWidth = mMediaPlayer.getVideoWidth();
+        Log.e("Height",mHeight+"");
+        Log.e("Width",mWidth+"");
         if (getResources().getConfiguration().orientation == 1) {
             mController.showPermanent();
         }else {
