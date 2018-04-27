@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
     private boolean mIsFullScreen = false;
     private boolean mIsMute = false;
     private int mVideoHeight, mVideoWidth, mScreenHeight, mScreenWidth;
+    private int mBufferPercentage;
 
 
     @Override
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public int getBufferPercentage() {
-        return 0;
+        return mBufferPercentage;
     }
 
     @Override
@@ -182,6 +183,12 @@ public class MainActivity extends AppCompatActivity implements VideoControllerVi
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+            @Override
+            public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                mBufferPercentage = percent;
+            }
+        });
         mController.setMediaPlayer(this);
         mController.setAnchorView(mOuterFramLayout);
         mVideoHeight = mMediaPlayer.getVideoHeight();
